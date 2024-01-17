@@ -1,5 +1,6 @@
 package fr.shazy.shrush.listeners;
 
+import com.avaje.ebeaninternal.server.persist.Constant;
 import net.minecraft.server.v1_9_R2.ChatTypeAdapterFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -17,6 +18,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import javax.swing.text.StyledEditorKit;
+import java.io.Console;
 import java.util.Arrays;
 
 public class SHRushListener implements Listener {
@@ -71,11 +73,10 @@ public class SHRushListener implements Listener {
      */
     @EventHandler
     public void onInteract(PlayerInteractEvent event){
-
         // On récupère le joueur qui a interagit avec l'objet
         Player player = event.getPlayer();
 
-        // Si l'objet est une étoile du nether
+        // Si l'objet est une étoile du nether ouvrant le menu
         if(event.getItem().getType() == Material.NETHER_STAR && event.getItem().getItemMeta().getDisplayName().equals("§c-§f-§c-§f-§c-§f-§c» §4§lMe§c§lnu §c«§f-§c-§f-§c-§f-§c-")){
             // On crée le GUI et les items à ajouter dedans
             Inventory inv = Bukkit.createInventory(null, 9, ChatColor.RED + "§lMine" + "§8§lstoners");
@@ -103,6 +104,25 @@ public class SHRushListener implements Listener {
 
             player.openInventory(inv);
         }
+        //si l'objet est la laine blanche qui permet de choisir son équipe
+        if (event.getItem().getType() == Material.WOOL && event.getItem().getItemMeta().getDisplayName().equals("§lChoix de l'équipe")){
+            Inventory menuRush = Bukkit.createInventory(null, 2,"§lChoix de l'équipe");
+            //crée un Item qui est un block de laine rouge
+            ItemStack laineRouge = new ItemStack(Material.WOOL, 1, (short) 14);
+            //crée un Item qui est un block de laine bleu
+            ItemStack laineBleu = new ItemStack(Material.WOOL, 1, (short) 11);
+            ItemMeta customlaineRouge = laineRouge.getItemMeta();
+            ItemMeta customlaineBleu = laineBleu.getItemMeta();
+            //on custom les blocks de laine
+            customlaineRouge.setDisplayName("§cEquipe Rouge");
+            customlaineBleu.setDisplayName("§9Equipe Bleu");
+            laineRouge.setItemMeta(customlaineRouge);
+            laineBleu.setItemMeta(customlaineBleu);
+            //on place les blocks de laine dans le menu
+            menuRush.setItem(0, laineRouge);
+            menuRush.setItem(1, laineBleu);
+            player.openInventory(menuRush);
+        }
     }
 
     @EventHandler
@@ -121,6 +141,18 @@ public class SHRushListener implements Listener {
             // Si l'item cliqué est un lit
             if(current.getType() == Material.BED){
                 player.chat("/rush");
+            }
+        }
+        //si l'inventaire est celui du menu de choix d'équipe
+        if (inv.getName().equals("§lChoix de l'équipe")){
+            //si l'item cliqué est un block de laine rouge
+            if (current.getType() == Material.WOOL && current.getItemMeta().getDisplayName().equals("§cEquipe Rouge")){
+                //on l'ajoute dans l'équipe rouge
+
+                //on téléporte le joueur dans l'équipe rouge
+                player.teleport(new Location(Bukkit.getWorld("world_the_end"), 10000, 50, 10000));
+                //on lui envoie un message
+                player.sendMessage(ChatColor.RED + "Tu as rejoint l'équipe rouge");
             }
         }
     }
