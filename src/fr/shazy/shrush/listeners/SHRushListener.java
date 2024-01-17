@@ -78,33 +78,42 @@ public class SHRushListener implements Listener {
         // On récupère le joueur qui a interagit avec l'objet
         Player player = event.getPlayer();
 
-        // Si l'objet est une étoile du nether
-        if(event.getItem().getType() == Material.NETHER_STAR && event.getItem().getItemMeta().getDisplayName().equals("§c-§f-§c-§f-§c-§f-§c» §4§lMe§c§lnu §c«§f-§c-§f-§c-§f-§c-")){
-            // On crée le GUI et les items à ajouter dedans
-            Inventory inv = Bukkit.createInventory(null, 9, ChatColor.RED + "§lMine" + "§8§lstoners");
-            ItemStack rush = new ItemStack(Material.BED);
-            ItemMeta customrush = rush.getItemMeta();
+        // Switch en fonction de l'item
+        switch(event.getItem().getType()){
+            case NETHER_STAR:
+                // On crée le GUI et les items à ajouter dedans
+                Inventory inv = Bukkit.createInventory(null, 9, ChatColor.RED + "§lMine" + "§8§lstoners");
+                ItemStack rush = new ItemStack(Material.BED);
+                ItemMeta customrush = rush.getItemMeta();
 
-            // On custom l'item
-            customrush.setDisplayName(ChatColor.WHITE + "✦ " + ChatColor.RED + "Rush");
-            customrush.setLore(Arrays.asList("§6-", "Cliques pour jouer en rush"));
-            customrush.addEnchant(org.bukkit.enchantments.Enchantment.DURABILITY, 1, true);
-            rush.setItemMeta(customrush);
+                // On custom l'item
+                customrush.setDisplayName(ChatColor.WHITE + "✦ " + ChatColor.RED + "Rush");
+                customrush.setLore(Arrays.asList("§6-", "Cliques pour jouer en rush"));
+                customrush.addEnchant(org.bukkit.enchantments.Enchantment.DURABILITY, 1, true);
+                rush.setItemMeta(customrush);
 
-            // On place les items dans le GUI
-            ItemStack redglass = new ItemStack(Material.STAINED_GLASS_PANE, 1);
+                // On place les items dans le GUI
+                ItemStack redglass = new ItemStack(Material.STAINED_GLASS_PANE, 1);
 
-            inv.setItem(0, redglass);
-            inv.setItem(1, redglass);
-            inv.setItem(2, redglass);
-            inv.setItem(3, redglass);
-            inv.setItem(4, rush);
-            inv.setItem(5, redglass);
-            inv.setItem(6, redglass);
-            inv.setItem(7, redglass);
-            inv.setItem(8, redglass);
+                inv.setItem(0, redglass);
+                inv.setItem(1, redglass);
+                inv.setItem(2, redglass);
+                inv.setItem(3, redglass);
+                inv.setItem(4, rush);
+                inv.setItem(5, redglass);
+                inv.setItem(6, redglass);
+                inv.setItem(7, redglass);
+                inv.setItem(8, redglass);
 
-            player.openInventory(inv);
+                player.openInventory(inv);
+                break;
+            case WOOD_DOOR:
+                // On retire la porte de l'inventaire du joueur
+                player.getInventory().setItem(8, null);
+
+                // On téléporte le joueur au spawn
+                player.chat("/spawn");
+                break;
         }
     }
 
@@ -121,9 +130,23 @@ public class SHRushListener implements Listener {
 
         // Si l'inventaire est celui du menu
         if(inv.getName().equals(ChatColor.RED + "§lMine" + "§8§lstoners")){
-            // Si l'item cliqué est un lit
-            if(current.getType() == Material.BED){
-                player.chat("/rush");
+            // switch en fonction de l'item cliqué
+            switch(current.getType()){
+                case BED:
+                    // On téléporte le joueur au lobby du rush
+                    player.chat("/rush");
+                    // On crée une porte
+                    ItemStack door = new ItemStack(Material.WOOD_DOOR);
+                    ItemMeta customdoor = door.getItemMeta();
+                    customdoor.setDisplayName(ChatColor.RED + "§lQuitter");
+                    door.setItemMeta(customdoor);
+                    // On donne l'item au joueur
+                    player.getInventory().setItem(8, door);
+                    break;
+                case STAINED_GLASS_PANE:
+                    // On annule l'évènement pour que le joueur ne puisse pas prendre l'item
+                    event.setCancelled(true);
+                    break;
             }
         }
     }
