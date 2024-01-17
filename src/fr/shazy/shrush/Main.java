@@ -20,6 +20,8 @@ public class Main extends JavaPlugin{
 
         // On crée un listener
         getServer().getPluginManager().registerEvents(new SHRushListener(), this);
+
+        // On crée une partie
     }
 
     @Override

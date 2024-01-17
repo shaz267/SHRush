@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/SHRush.iml" filepath="$PROJECT_DIR$/.idea/SHRush.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SHRush.iml" filepath="$PROJECT_DIR$/SHRush.iml" />
     </modules>
   </component>
 </project>
