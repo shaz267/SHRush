@@ -109,6 +109,9 @@ public class SHRushListener implements Listener {
                 // On retire la porte de l'inventaire du joueur
                 player.getInventory().setItem(8, null);
 
+                // On retire la laine de l'inventaire du joueur
+                player.getInventory().setItem(0, null);
+
                 // On téléporte le joueur au spawn
                 player.chat("/spawn");
                 break;
