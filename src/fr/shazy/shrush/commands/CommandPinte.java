@@ -18,7 +18,7 @@ public class CommandPinte implements CommandExecutor {
             // On lui ajoute un effet de nausée
             player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 500, 50));
             // On lui envoie un message
-            player.sendMessage(ChatColor.GREEN + "Petit coquin ! Tu vas finir avec la même panse que Seb.");
+            player.sendMessage(ChatColor.GREEN + "Petit coquin vaj ! Tu vas finir avec la même panse que Seb.");
         }
         return false;
     }

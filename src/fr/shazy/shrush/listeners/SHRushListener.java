@@ -30,6 +30,9 @@ public class SHRushListener implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event){
 
+        // On téléporte le joueur au spawn
+        event.getPlayer().chat("/spawn");
+
         // On désactive le message de bienvenue par défaut
         event.setJoinMessage(null);
 
