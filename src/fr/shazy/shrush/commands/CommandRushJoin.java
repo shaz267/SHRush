@@ -28,7 +28,15 @@ public class CommandRushJoin implements CommandExecutor {
         customlaine.setDisplayName("§lChoix de l'équipe");
         laine.setItemMeta(customlaine);
         //on donne la laine au joueur
-        player.getInventory().setItem(0, laine);
+        player.getInventory().setItem(1, laine);
+
+        // On crée une porte
+        ItemStack door = new ItemStack(Material.WOOD_DOOR);
+        ItemMeta customdoor = door.getItemMeta();
+        customdoor.setDisplayName(ChatColor.RED + "§lQuitter");
+        door.setItemMeta(customdoor);
+        // On donne l'item au joueur
+        player.getInventory().setItem(8, door);
 
         // On téléporte le joueur au lobby du rush
         player.teleport(new Location(Bukkit.getWorld("world_the_end"), 10000, 50, 10000));

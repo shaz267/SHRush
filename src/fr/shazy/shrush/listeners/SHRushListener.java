@@ -1,7 +1,5 @@
 package fr.shazy.shrush.listeners;
 
-import com.avaje.ebeaninternal.server.persist.Constant;
-import net.minecraft.server.v1_9_R2.ChatTypeAdapterFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -17,8 +15,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import javax.swing.text.StyledEditorKit;
-import java.io.Console;
 import java.util.Arrays;
 
 public class SHRushListener implements Listener {
@@ -80,6 +76,7 @@ public class SHRushListener implements Listener {
         Player player = event.getPlayer();
 
         // Switch en fonction de l'item
+        if(event.getItem() == null){return;} // Si l'item est null (si le joueur n'a rien dans la main) on ne fait rien
         switch(event.getItem().getType()){
             case NETHER_STAR:
                 // On crée le GUI et les items à ajouter dedans
@@ -115,25 +112,25 @@ public class SHRushListener implements Listener {
                 // On téléporte le joueur au spawn
                 player.chat("/spawn");
                 break;
-        }
-        //si l'objet est la laine blanche qui permet de choisir son équipe
-        if (event.getItem().getType() == Material.WOOL && event.getItem().getItemMeta().getDisplayName().equals("§lChoix de l'équipe")){
-            Inventory menuRush = Bukkit.createInventory(null, 2,"§lChoix de l'équipe");
-            //crée un Item qui est un block de laine rouge
-            ItemStack laineRouge = new ItemStack(Material.WOOL, 1, (short) 14);
-            //crée un Item qui est un block de laine bleu
-            ItemStack laineBleu = new ItemStack(Material.WOOL, 1, (short) 11);
-            ItemMeta customlaineRouge = laineRouge.getItemMeta();
-            ItemMeta customlaineBleu = laineBleu.getItemMeta();
-            //on custom les blocks de laine
-            customlaineRouge.setDisplayName("§cEquipe Rouge");
-            customlaineBleu.setDisplayName("§9Equipe Bleu");
-            laineRouge.setItemMeta(customlaineRouge);
-            laineBleu.setItemMeta(customlaineBleu);
-            //on place les blocks de laine dans le menu
-            menuRush.setItem(0, laineRouge);
-            menuRush.setItem(1, laineBleu);
-            player.openInventory(menuRush);
+            // Si l'item est la laine blanche qui permet de choisir son équipe
+            case WOOL:
+                Inventory menuRush = Bukkit.createInventory(null, 2,"§lChoix de l'équipe");
+                //crée un Item qui est un block de laine rouge
+                ItemStack laineRouge = new ItemStack(Material.WOOL, 1, (short) 14);
+                //crée un Item qui est un block de laine bleu
+                ItemStack laineBleu = new ItemStack(Material.WOOL, 1, (short) 11);
+                ItemMeta customlaineRouge = laineRouge.getItemMeta();
+                ItemMeta customlaineBleu = laineBleu.getItemMeta();
+                //on custom les blocks de laine
+                customlaineRouge.setDisplayName("§cEquipe Rouge");
+                customlaineBleu.setDisplayName("§9Equipe Bleu");
+                laineRouge.setItemMeta(customlaineRouge);
+                laineBleu.setItemMeta(customlaineBleu);
+                //on place les blocks de laine dans le menu
+                menuRush.setItem(0, laineRouge);
+                menuRush.setItem(1, laineBleu);
+                player.openInventory(menuRush);
+                break;
         }
     }
 
@@ -155,13 +152,6 @@ public class SHRushListener implements Listener {
                 case BED:
                     // On téléporte le joueur au lobby du rush
                     player.chat("/rush");
-                    // On crée une porte
-                    ItemStack door = new ItemStack(Material.WOOD_DOOR);
-                    ItemMeta customdoor = door.getItemMeta();
-                    customdoor.setDisplayName(ChatColor.RED + "§lQuitter");
-                    door.setItemMeta(customdoor);
-                    // On donne l'item au joueur
-                    player.getInventory().setItem(8, door);
                     break;
                 case STAINED_GLASS_PANE:
                     // On annule l'évènement pour que le joueur ne puisse pas prendre l'item
