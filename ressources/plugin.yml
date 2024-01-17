@@ -1,0 +1,12 @@
+name: SHRush
+author: [Shazy_, JoLopezDseMor69, ma_the_eauu]
+version: 0.1
+description: Plugin de fou
+main: fr.shazy.shrush.Main
+commands:
+  spawn:
+    description: Permet de se tp au spawn
+  rush:
+    description: Permet de lancer une partie de rush
+  pinte:
+    description: Permet de boire une pinte
