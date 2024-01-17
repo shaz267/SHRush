@@ -117,7 +117,7 @@ public class SHRushListener implements Listener {
                 break;
             // Si l'item est la laine blanche qui permet de choisir son équipe
             case WOOL:
-                Inventory menuRush = Bukkit.createInventory(null, 2,"§lChoix de l'équipe");
+                Inventory menuRush = Bukkit.createInventory(null, 9,"§lChoix de l'équipe");
                 //crée un Item qui est un block de laine rouge
                 ItemStack laineRouge = new ItemStack(Material.WOOL, 1, (short) 14);
                 //crée un Item qui est un block de laine bleu
