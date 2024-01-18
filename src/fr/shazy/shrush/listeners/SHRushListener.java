@@ -20,6 +20,11 @@ import java.lang.reflect.Array;
 import java.util.Arrays;
 
 public class SHRushListener implements Listener {
+    private Inventory menuRush;
+
+    public SHRushListener (){
+        menuRush = Bukkit.createInventory(null, 9,"§lChoix de l'équipe");
+    }
 
     /**
      * Méthode qui gère tout ce qui se passe lors de la connexion d'un joueur
@@ -119,7 +124,6 @@ public class SHRushListener implements Listener {
                 break;
             // Si l'item est la laine blanche qui permet de choisir son équipe
             case WOOL:
-                Inventory menuRush = Bukkit.createInventory(null, 9,"§lChoix de l'équipe");
                 //crée un Item qui est un block de laine rouge
                 ItemStack laineRouge = new ItemStack(Material.WOOL, 1, (short) 14);
                 //crée un Item qui est un block de laine bleu
@@ -127,12 +131,7 @@ public class SHRushListener implements Listener {
                 ItemMeta customlaineRouge = laineRouge.getItemMeta();
                 ItemMeta customlaineBleu = laineBleu.getItemMeta();
                 //on custom les blocks de laine
-                String lore;
                 customlaineRouge.setDisplayName("§cEquipe Rouge");
-                for (CommandRushJoin.getPartie().getTeam("Rouge").getPlayers()) {
-                    lore = "§6- " + player.getName()+"\n";
-                }
-                customlaineRouge.setLore(Arrays.asList(lore));
                 customlaineBleu.setDisplayName("§9Equipe Bleu");
                 laineRouge.setItemMeta(customlaineRouge);
                 laineBleu.setItemMeta(customlaineBleu);
@@ -171,10 +170,17 @@ public class SHRushListener implements Listener {
         }
         //si l'inventaire est celui du menu de choix d'équipe
         if (inv.getName().equals("§lChoix de l'équipe")){
+            menuRush = Bukkit.createInventory(null, 9,"§lChoix de l'équipe");
             //si l'item cliqué est un block de laine rouge
             if (current.getType() == Material.WOOL && current.getItemMeta().getDisplayName().equals("§cEquipe Rouge")){
                 //on l'ajoute dans l'équipe rouge
                 CommandRushJoin.getPartie().getTeam("Rouge").ajouterPlayer(player);
+                //on met a jour le lore
+                String lore = "";
+                for (Player p : CommandRushJoin.getPartie().getTeam("Rouge").getPlayersList()) {
+                    lore += p.getName() + "\n";
+                }
+                current.getItemMeta().setLore(Arrays.asList(lore));
                 //on téléporte le joueur dans l'équipe rouge
                 player.teleport(new Location(Bukkit.getWorld("world_the_end"), 10000, 50, 10000));
                 //on lui envoie un message
