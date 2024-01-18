@@ -17,6 +17,7 @@ public class TeamRush {
         this.name = name;
         this.color = color;
         this.playersList = new ArrayList<Player>();
+        //dqs
     }
 
     public String getName() {
