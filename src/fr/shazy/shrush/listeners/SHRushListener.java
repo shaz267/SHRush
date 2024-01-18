@@ -1,6 +1,7 @@
 package fr.shazy.shrush.listeners;
 
 import fr.shazy.shrush.commands.CommandRushJoin;
+import fr.shazy.shrush.rush.TeamRush;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -15,17 +16,13 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scoreboard.Team;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.Collections;
 
 public class SHRushListener implements Listener {
-    private Inventory menuRush;
-
-    public SHRushListener (){
-        menuRush = Bukkit.createInventory(null, 9,"§lChoix de l'équipe");
-    }
-
     /**
      * Méthode qui gère tout ce qui se passe lors de la connexion d'un joueur
      * @param event
@@ -124,6 +121,7 @@ public class SHRushListener implements Listener {
                 break;
             // Si l'item est la laine blanche qui permet de choisir son équipe
             case WOOL:
+                Inventory menuRush = Bukkit.createInventory(null, 9,"§lChoix de l'équipe");
                 //crée un Item qui est un block de laine rouge
                 ItemStack laineRouge = new ItemStack(Material.WOOL, 1, (short) 14);
                 //crée un Item qui est un block de laine bleu
@@ -131,8 +129,18 @@ public class SHRushListener implements Listener {
                 ItemMeta customlaineRouge = laineRouge.getItemMeta();
                 ItemMeta customlaineBleu = laineBleu.getItemMeta();
                 //on custom les blocks de laine
+                String lore = "";
                 customlaineRouge.setDisplayName("§cEquipe Rouge");
+                for (Player p : CommandRushJoin.getPartie().getTeam("Rouge").getPlayersList()) {
+                    lore += p.getName() + "\n";
+                }
+                customlaineRouge.setLore(Collections.singletonList(lore));
                 customlaineBleu.setDisplayName("§9Equipe Bleu");
+                lore = "";
+                for (Player p : CommandRushJoin.getPartie().getTeam("Bleu").getPlayersList()) {
+                    lore += p.getName() + "\n";
+                }
+                customlaineBleu.setLore(Collections.singletonList(lore));
                 laineRouge.setItemMeta(customlaineRouge);
                 laineBleu.setItemMeta(customlaineBleu);
                 //on place les blocks de laine dans le menu
@@ -170,33 +178,36 @@ public class SHRushListener implements Listener {
         }
         //si l'inventaire est celui du menu de choix d'équipe
         if (inv.getName().equals("§lChoix de l'équipe")){
-            menuRush = Bukkit.createInventory(null, 9,"§lChoix de l'équipe");
+            TeamRush teamRouge = CommandRushJoin.getPartie().getTeam("Rouge");
+            TeamRush teamBleu = CommandRushJoin.getPartie().getTeam("Bleu");
             //si l'item cliqué est un block de laine rouge
             if (current.getType() == Material.WOOL && current.getItemMeta().getDisplayName().equals("§cEquipe Rouge")){
-                //on l'ajoute dans l'équipe rouge
-                CommandRushJoin.getPartie().getTeam("Rouge").ajouterPlayer(player);
-                //on met a jour le lore
-                String lore = "";
-                for (Player p : CommandRushJoin.getPartie().getTeam("Rouge").getPlayersList()) {
-                    lore += p.getName() + "\n";
+                player.closeInventory();
+                //on l'ajoute dans l'équipe rouge s'il n'y est pas déjà
+                if (!teamRouge.getPlayersList().contains(player)) {
+                    teamBleu.getPlayersList().remove(player);
+                    teamRouge.ajouterPlayer(player);
+                    //on lui envoie un message
+                    player.sendMessage(ChatColor.RED + "Tu as rejoint l'équipe rouge");
                 }
-                current.getItemMeta().setLore(Arrays.asList(lore));
-                //on téléporte le joueur dans l'équipe rouge
-                player.teleport(new Location(Bukkit.getWorld("world_the_end"), 10000, 50, 10000));
-                //on lui envoie un message
-                player.sendMessage(ChatColor.RED + "Tu as rejoint l'équipe rouge");
+                else
+                    player.sendMessage(ChatColor.RED + "Tu es déjà dans l'équipe rouge");
             }
             //si l'item cliqué est un block de laine bleu
             if (current.getType() == Material.WOOL && current.getItemMeta().getDisplayName().equals("§9Equipe Bleu")){
-                //on l'ajoute dans l'équipe bleu
-                CommandRushJoin.getPartie().getTeam("Bleu").ajouterPlayer(player);
-                //on téléporte le joueur dans l'équipe bleu
-                player.teleport(new Location(Bukkit.getWorld("world_the_end"), 10000, 50, 10000));
-                //on lui envoie un message
-                player.sendMessage(ChatColor.BLUE + "Tu as rejoint l'équipe bleu");
+                player.closeInventory();
+                //on l'ajoute dans l'équipe bleu s'il n'y est pas déjà
+                if (!teamBleu.getPlayersList().contains(player)) {
+                    teamRouge.getPlayersList().remove(player);
+                    teamBleu.ajouterPlayer(player);
+                    //on lui envoie un message
+                    player.sendMessage(ChatColor.BLUE + "Tu as rejoint l'équipe bleu");
+                }
+                else
+                    player.sendMessage(ChatColor.BLUE + "Tu es déjà dans l'équipe bleu");
             }
             //si les deux équipes sont pleines on démarre la partie
-            if (CommandRushJoin.getPartie().getTeam("Rouge").getPlayers()==CommandRushJoin.getPartie().getTeam("Rouge").getMaxPlayers()&&CommandRushJoin.getPartie().getTeam("Bleu").getPlayers()==CommandRushJoin.getPartie().getTeam("Bleu").getMaxPlayers()) {
+            if (teamRouge.getPlayersList().size()==teamRouge.getMaxPlayers()&&teamBleu.getPlayersList().size()==teamBleu.getMaxPlayers()) {
                 // On préviens que le paetie va commencer
                 Bukkit.getServer().broadcastMessage(ChatColor.GREEN + "Que la partie commence !");
                 // On démarre la partie

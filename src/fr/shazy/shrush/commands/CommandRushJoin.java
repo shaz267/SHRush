@@ -33,13 +33,7 @@ public class CommandRushJoin implements CommandExecutor {
         if (!partie.isStarted()&&partie.getPlayers()<partie.getMaxPlayers()) {
             // On ajoute le joueur à la partie
             partie.ajouterPlayer(player);
-            /*if (partie.getPlayers()==partie.getMaxPlayers()) {
-                // On préviens que le paetie va commencer
-                Bukkit.getServer().broadcastMessage(ChatColor.GREEN + "La partie va commencer !");
-                // On démarre la partie
-                partie.setStarted(true);
-            }
-             */
+
         } else {
             // On envoie un message d'erreur
             commandSender.sendMessage(ChatColor.RED + "La partie est pleine !");
