@@ -3,6 +3,7 @@ import fr.shazy.shrush.commands.CommandPinte;
 import fr.shazy.shrush.commands.CommandRushJoin;
 import fr.shazy.shrush.commands.CommandSpawn;
 import fr.shazy.shrush.listeners.SHRushListener;
+import fr.shazy.shrush.rush.PartieRush;
 import org.bukkit.plugin.java.*;
 
 public class Main extends JavaPlugin{
@@ -20,8 +21,6 @@ public class Main extends JavaPlugin{
 
         // On crée un listener
         getServer().getPluginManager().registerEvents(new SHRushListener(), this);
-
-        // On crée une partie
     }
 
     @Override

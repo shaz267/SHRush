@@ -1,5 +1,6 @@
 package fr.shazy.shrush.listeners;
 
+import fr.shazy.shrush.commands.CommandRushJoin;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -15,6 +16,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 
 public class SHRushListener implements Listener {
@@ -125,7 +127,12 @@ public class SHRushListener implements Listener {
                 ItemMeta customlaineRouge = laineRouge.getItemMeta();
                 ItemMeta customlaineBleu = laineBleu.getItemMeta();
                 //on custom les blocks de laine
+                String lore;
                 customlaineRouge.setDisplayName("§cEquipe Rouge");
+                for (CommandRushJoin.getPartie().getTeam("Rouge").getPlayers()) {
+                    lore = "§6- " + player.getName()+"\n";
+                }
+                customlaineRouge.setLore(Arrays.asList(lore));
                 customlaineBleu.setDisplayName("§9Equipe Bleu");
                 laineRouge.setItemMeta(customlaineRouge);
                 laineBleu.setItemMeta(customlaineBleu);
@@ -167,11 +174,27 @@ public class SHRushListener implements Listener {
             //si l'item cliqué est un block de laine rouge
             if (current.getType() == Material.WOOL && current.getItemMeta().getDisplayName().equals("§cEquipe Rouge")){
                 //on l'ajoute dans l'équipe rouge
-
+                CommandRushJoin.getPartie().getTeam("Rouge").ajouterPlayer(player);
                 //on téléporte le joueur dans l'équipe rouge
                 player.teleport(new Location(Bukkit.getWorld("world_the_end"), 10000, 50, 10000));
                 //on lui envoie un message
                 player.sendMessage(ChatColor.RED + "Tu as rejoint l'équipe rouge");
+            }
+            //si l'item cliqué est un block de laine bleu
+            if (current.getType() == Material.WOOL && current.getItemMeta().getDisplayName().equals("§9Equipe Bleu")){
+                //on l'ajoute dans l'équipe bleu
+                CommandRushJoin.getPartie().getTeam("Bleu").ajouterPlayer(player);
+                //on téléporte le joueur dans l'équipe bleu
+                player.teleport(new Location(Bukkit.getWorld("world_the_end"), 10000, 50, 10000));
+                //on lui envoie un message
+                player.sendMessage(ChatColor.BLUE + "Tu as rejoint l'équipe bleu");
+            }
+            //si les deux équipes sont pleines on démarre la partie
+            if (CommandRushJoin.getPartie().getTeam("Rouge").getPlayers()==CommandRushJoin.getPartie().getTeam("Rouge").getMaxPlayers()&&CommandRushJoin.getPartie().getTeam("Bleu").getPlayers()==CommandRushJoin.getPartie().getTeam("Bleu").getMaxPlayers()) {
+                // On préviens que le paetie va commencer
+                Bukkit.getServer().broadcastMessage(ChatColor.GREEN + "Que la partie commence !");
+                // On démarre la partie
+                CommandRushJoin.getPartie().setStarted(true);
             }
         }
     }

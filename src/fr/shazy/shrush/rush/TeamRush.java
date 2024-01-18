@@ -1,5 +1,6 @@
 package fr.shazy.shrush.rush;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.awt.*;
@@ -34,5 +35,13 @@ public class TeamRush {
     }
     public ArrayList<Player> getPlayersList() {
         return playersList;
+    }
+    public void ajouterPlayer(Player player) {
+        if (this.players<this.maxPlayers) {
+            this.players++;
+            this.playersList.add(player);
+        }
+        else
+            player.sendMessage(ChatColor.RED + "La team est pleine !");
     }
 }
