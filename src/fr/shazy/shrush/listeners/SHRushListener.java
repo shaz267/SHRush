@@ -153,7 +153,6 @@ public class SHRushListener implements Listener {
 
     @EventHandler
     public void onClick(InventoryClickEvent event){
-
         // On récupère l'inventaire, le joueur et l'item cliqué
         Inventory inv = event.getInventory();
         Player player = (Player) event.getWhoClicked();
@@ -212,6 +211,7 @@ public class SHRushListener implements Listener {
                 Bukkit.getServer().broadcastMessage(ChatColor.GREEN + "Que la partie commence !");
                 // On démarre la partie
                 CommandRushJoin.getPartie().setStarted(true);
+                CommandRushJoin.getPartie().start();
             }
         }
     }

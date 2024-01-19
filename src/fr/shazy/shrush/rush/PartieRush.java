@@ -1,5 +1,8 @@
 package fr.shazy.shrush.rush;
 
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -16,6 +19,45 @@ public class PartieRush {
         this.started = false;
         this.teams = new ArrayList<TeamRush>();
         this.playersList = new ArrayList<Player>();
+    }
+    public void start() { //méthode pas très opti je pense
+        TeamRush teamRouge = teams.get(0);
+        TeamRush teamBleu = teams.get(1);
+        for (Player player : teamRouge.getPlayersList()) {
+            player.teleport(new Location(Bukkit.getWorld("world_the_end"), 10000, 50, 10000));
+            player.sendTitle("§c§lVa me les saigner !", "(c'est sur ta droite)");
+        }
+        for (Player player : teamBleu.getPlayersList()) {
+            player.teleport(new Location(Bukkit.getWorld("world_the_end"), 10000, 50, 10000));
+            player.sendTitle("§r§lVa me les saigner !", "(c'est sur ta gauche)");
+        }
+        while (this.started) {
+            for (Player player : playersList) {
+                if (player.isDead()){
+                    player.spigot().respawn();
+                    if (teamRouge.getPlayersList().contains(player)) {
+                        if (teamRouge.isBedDestroyed()) {
+                            player.setGameMode(org.bukkit.GameMode.SPECTATOR);
+                            player.sendTitle("§c§lT'es mort mec ! et tu va pas réaparaitre", "la honte..");
+                        }
+                        player.teleport(new Location(Bukkit.getWorld("world_the_end"), 10000, 50, 10000));
+                    }
+                    if (teamBleu.getPlayersList().contains(player)) {
+                        if (teamBleu.isBedDestroyed()) {
+                            player.setGameMode(org.bukkit.GameMode.SPECTATOR);
+                            player.sendTitle("§c§lT'es mort mec ! et tu va pas réaparaitre", "la honte..");
+                        }
+                        player.teleport(new Location(Bukkit.getWorld("world_the_end"), 10000, 50, 10000));
+                    }
+                    player.sendTitle("§c§lC'est pas fini lache rien !", "");
+                }
+            }
+        }
+        for (Player player : playersList) {
+            player.setGameMode(GameMode.SURVIVAL);
+            player.sendTitle("§c§lLa partie est finie !", "");
+            player.chat("/spawn");
+        }
     }
     public int getMaxPlayers() {
         return maxPlayers;

@@ -37,7 +37,7 @@ public class CommandSpawn implements CommandExecutor {
                 player.getInventory().addItem(netherstar);
             }
             // On crée la zone d'apparition
-            Location spawn = new Location(Bukkit.getWorld("world"), -14, 70, 316);
+            Location spawn = new Location(Bukkit.getWorld("world"), -250, 96, -201);
             // On téléporte le joueur
             player.teleport(spawn);
             // On envoie un message de confirmation au joueur

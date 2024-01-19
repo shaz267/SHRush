@@ -12,12 +12,19 @@ public class TeamRush {
     private Color color;
     private final int maxPlayers = 2;
     private ArrayList<Player> playersList;
+    private boolean bedDestroyed;
 
     public TeamRush(String name, Color color) {
         this.name = name;
         this.color = color;
         this.playersList = new ArrayList<Player>();
-        //dqs
+    }
+    public void ajouterPlayer(Player player) {
+        if (this.playersList.size()<this.maxPlayers) {
+            this.playersList.add(player);
+        }
+        else
+            player.sendMessage(ChatColor.RED + "La team est pleine !");
     }
 
     public String getName() {
@@ -33,11 +40,7 @@ public class TeamRush {
     public ArrayList<Player> getPlayersList() {
         return playersList;
     }
-    public void ajouterPlayer(Player player) {
-        if (this.playersList.size()<this.maxPlayers) {
-            this.playersList.add(player);
-        }
-        else
-            player.sendMessage(ChatColor.RED + "La team est pleine !");
+    public boolean isBedDestroyed() {
+        return bedDestroyed;
     }
 }
