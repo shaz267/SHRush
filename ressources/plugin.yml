@@ -10,3 +10,5 @@ commands:
     description: Permet de lancer une partie de rush
   pinte:
     description: Permet de boire une pinte
+  duel:
+    description: Permet de lancer un duel
