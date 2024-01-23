@@ -18,10 +18,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.scoreboard.Team;
-
-import java.io.Console;
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -32,9 +28,6 @@ public class SHRushListener implements Listener {
      */
     @EventHandler
     public void onJoin(PlayerJoinEvent event){
-
-        // On active le pvp 1.8 pour le joueur
-        Bukkit.getServer().broadcastMessage("ocm mode old " + event.getPlayer().getName());
 
         // On téléporte le joueur au spawn
         event.getPlayer().chat("/spawn");
@@ -253,7 +246,6 @@ public class SHRushListener implements Listener {
         // On récupère le joueur
         Player player = e.getEntity();
 
-
         // Si le joueur est dans la partie de duel
         if(Main.partieDuel.getPlayersList().contains(player)){
             Player otherPlayer;
@@ -266,6 +258,9 @@ public class SHRushListener implements Listener {
                 otherPlayer = Main.partieDuel.getPlayersList().get(0);
             // On affiche un message
             Bukkit.getServer().broadcastMessage(ChatColor.YELLOW + player.getName() + ChatColor.GRAY + " a perdu en duel face à " + ChatColor.YELLOW + otherPlayer.getName() + ChatColor.GRAY + " !");
+            // On téléporte les joueur au spawn
+            player.chat("/spawn");
+            otherPlayer.chat("/spawn");
         }
     }
 

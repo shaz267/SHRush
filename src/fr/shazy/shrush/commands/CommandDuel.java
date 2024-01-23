@@ -33,6 +33,8 @@ public class CommandDuel implements CommandExecutor {
             Location duel = new Location(Bukkit.getWorld("world"), -295, 97, -207);
             // On téléporte le joueur
             player.teleport(duel);
+            // On le clear
+            player.getInventory().clear();
             // On affiche un message
             Bukkit.getServer().broadcastMessage(ChatColor.YELLOW + player.getName() + ChatColor.GRAY + " a rejoint la partie de duel !");
             // On ajoute le joueur à la partie
