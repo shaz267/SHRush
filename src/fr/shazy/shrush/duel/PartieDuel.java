@@ -43,7 +43,7 @@ public class PartieDuel {
         }
         // On téléporte les 2 joueurs dans l'arène
         Location arene1 = new Location(Bukkit.getWorld("world"), -295, 97, -200);
-        Location arene2 = new Location(Bukkit.getWorld("world"), -300, 97, -220);
+        Location arene2 = new Location(Bukkit.getWorld("world"), -290, 97, -204);
         playersList.get(0).teleport(arene1);
         playersList.get(1).teleport(arene2);
         // On clear les inventaires des joueurs
@@ -58,6 +58,7 @@ public class PartieDuel {
         // Une rod
         ItemStack rod = new ItemStack(Material.FISHING_ROD);
         // Des flèches
+        ItemStack arrow = new ItemStack(Material.ARROW, 15);
         // On donne tout ça aux joueurs
         playersList.get(0).getInventory().setItem(0, sword);
         playersList.get(1).getInventory().setItem(0, sword);
@@ -67,11 +68,26 @@ public class PartieDuel {
         playersList.get(1).getInventory().setItem(2, apple);
         playersList.get(0).getInventory().setItem(3, rod);
         playersList.get(1).getInventory().setItem(3, rod);
+        playersList.get(0).getInventory().setItem(4, arrow);
+        playersList.get(1).getInventory().setItem(4, arrow);
 
-
-        // On
+        // On vérifie que les joueurs soient en survival
+        if (playersList.get(0).getGameMode() != org.bukkit.GameMode.SURVIVAL)
+            playersList.get(0).setGameMode(org.bukkit.GameMode.SURVIVAL);
+        if (playersList.get(1).getGameMode() != org.bukkit.GameMode.SURVIVAL)
+            playersList.get(1).setGameMode(org.bukkit.GameMode.SURVIVAL);
 
         this.started = true;
+    }
+
+    /**
+     * Méthode qui arrête la partie
+     */
+    public void stop(){
+        this.started = false;
+        for (Player player : playersList) {
+
+        }
     }
 
     /**

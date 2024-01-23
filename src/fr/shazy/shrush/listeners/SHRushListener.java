@@ -1,13 +1,14 @@
 package fr.shazy.shrush.listeners;
 
+import fr.shazy.shrush.Main;
 import fr.shazy.shrush.commands.CommandRushJoin;
 import fr.shazy.shrush.rush.TeamRush;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -19,6 +20,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scoreboard.Team;
 
+import java.io.Console;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Collections;
@@ -30,6 +32,9 @@ public class SHRushListener implements Listener {
      */
     @EventHandler
     public void onJoin(PlayerJoinEvent event){
+
+        // On active le pvp 1.8 pour le joueur
+        Bukkit.getServer().broadcastMessage("ocm mode old " + event.getPlayer().getName());
 
         // On téléporte le joueur au spawn
         event.getPlayer().chat("/spawn");
@@ -237,6 +242,30 @@ public class SHRushListener implements Listener {
             event.getBlock().setType(Material.AIR);
             //on met le lit comme détruit
             team.setBedDestroyed(true);
+        }
+    }
+
+    /**
+     * Méthode qui gère tout ce qui se passe lors de la mort d'un joueur
+     */
+    @EventHandler
+    public void onPlayerDeath(PlayerDeathEvent e){
+        // On récupère le joueur
+        Player player = e.getEntity();
+
+
+        // Si le joueur est dans la partie de duel
+        if(Main.partieDuel.getPlayersList().contains(player)){
+            Player otherPlayer;
+            // On arrête la partie
+            Main.partieDuel.stop();
+            // On récupère l'autre joueur de la partie
+            if(Main.partieDuel.getPlayersList().get(0) == player)
+                otherPlayer = Main.partieDuel.getPlayersList().get(1);
+            else
+                otherPlayer = Main.partieDuel.getPlayersList().get(0);
+            // On affiche un message
+            Bukkit.getServer().broadcastMessage(ChatColor.YELLOW + player.getName() + ChatColor.GRAY + " a perdu en duel face à " + ChatColor.YELLOW + otherPlayer.getName() + ChatColor.GRAY + " !");
         }
     }
 
