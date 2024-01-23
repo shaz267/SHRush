@@ -1,13 +1,15 @@
 package fr.shazy.shrush.rush;
 
+import fr.shazy.shrush.commands.CommandRushJoin;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
 
 import java.util.ArrayList;
 
-public class PartieRush {
+public class PartieRush{
     private final int maxPlayers = 4;
     private int players;
     private boolean started;
@@ -35,18 +37,15 @@ public class PartieRush {
             for (Player player : playersList) {
                 if (player.isDead()){
                     player.spigot().respawn();
+                    if (CommandRushJoin.getPartie().getTeam(player).isBedDestroyed()){
+                        player.setGameMode(org.bukkit.GameMode.SPECTATOR);
+                        player.sendTitle("§c§lT'es mort mec ! et tu va pas réaparaitre", "la honte..");
+                    }
+
                     if (teamRouge.getPlayersList().contains(player)) {
-                        if (teamRouge.isBedDestroyed()) {
-                            player.setGameMode(org.bukkit.GameMode.SPECTATOR);
-                            player.sendTitle("§c§lT'es mort mec ! et tu va pas réaparaitre", "la honte..");
-                        }
                         player.teleport(new Location(Bukkit.getWorld("world_the_end"), 10000, 50, 10000));
                     }
                     if (teamBleu.getPlayersList().contains(player)) {
-                        if (teamBleu.isBedDestroyed()) {
-                            player.setGameMode(org.bukkit.GameMode.SPECTATOR);
-                            player.sendTitle("§c§lT'es mort mec ! et tu va pas réaparaitre", "la honte..");
-                        }
                         player.teleport(new Location(Bukkit.getWorld("world_the_end"), 10000, 50, 10000));
                     }
                     player.sendTitle("§c§lC'est pas fini lache rien !", "");
@@ -87,6 +86,14 @@ public class PartieRush {
     public TeamRush getTeam(String nomTeam){
         for (TeamRush team : teams) {
             if (team.getName().equals(nomTeam)) {
+                return team;
+            }
+        }
+        return null;
+    }
+    public TeamRush getTeam(Player player){
+        for (TeamRush team : teams) {
+            if (team.getPlayersList().contains(player)) {
                 return team;
             }
         }

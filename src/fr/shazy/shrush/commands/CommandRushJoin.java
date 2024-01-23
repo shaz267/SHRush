@@ -36,7 +36,7 @@ public class CommandRushJoin implements CommandExecutor {
 
         } else {
             // On envoie un message d'erreur
-            commandSender.sendMessage(ChatColor.RED + "La partie est pleine !");
+            player.sendMessage(ChatColor.RED + "La partie est pleine !");
             return false;
         }
         // On ferme l'inventaire

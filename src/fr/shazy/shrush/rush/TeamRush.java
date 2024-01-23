@@ -43,4 +43,8 @@ public class TeamRush {
     public boolean isBedDestroyed() {
         return bedDestroyed;
     }
+
+    public void setBedDestroyed(boolean b) {
+        this.bedDestroyed = b;
+    }
 }

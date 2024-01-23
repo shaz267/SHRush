@@ -9,6 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -215,4 +216,28 @@ public class SHRushListener implements Listener {
             }
         }
     }
+    @EventHandler
+    public void onBreak(BlockBreakEvent event){
+        // On récupère le joueur
+        Player player = event.getPlayer();
+        // Si le joueur n'est pas dans le monde du rush
+        if(!player.getWorld().getName().equals("world_the_end")){
+            // On annule l'évènement
+            event.setCancelled(true);
+        }
+        //on récupère le block cassé
+        Material block = event.getBlock().getType();
+        //si le block cassé est un lit
+        if (block == Material.BED_BLOCK){
+            //on récupère l'équipe du joueur
+            TeamRush team = CommandRushJoin.getPartie().getTeam(player);
+            //affiche un message a tout les joueurs
+            Bukkit.getServer().broadcastMessage(ChatColor.RED + player.getName() + " a détruit le lit de ses adversaires !");
+            //on détruit le lit
+            event.getBlock().setType(Material.AIR);
+            //on met le lit comme détruit
+            team.setBedDestroyed(true);
+        }
+    }
+
 }
