@@ -21,8 +21,8 @@ public class CommandSpawn implements CommandExecutor {
             // On récupère le joueur
             Player player = (Player) commandSender;
 
-            // Si le joueur n'est pas déja dans le monde du spawn
-            if(!player.getWorld().getName().equals("world")){
+            // Si le joueur n'a pas déja la netherstar
+            if(!player.getInventory().contains(Material.NETHER_STAR)){
                 // On regive le menu au joueur
                 ItemStack netherstar = new ItemStack(Material.NETHER_STAR);
 

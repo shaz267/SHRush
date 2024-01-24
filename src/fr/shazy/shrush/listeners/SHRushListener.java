@@ -5,6 +5,7 @@ import fr.shazy.shrush.commands.CommandRushJoin;
 import fr.shazy.shrush.rush.TeamRush;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,6 +16,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -85,13 +87,19 @@ public class SHRushListener implements Listener {
                 // On crée le GUI et les items à ajouter dedans
                 Inventory inv = Bukkit.createInventory(null, 9, ChatColor.RED + "§lMine" + "§8§lstoners");
                 ItemStack rush = new ItemStack(Material.BED);
+                ItemStack duel = new ItemStack(Material.IRON_SWORD);
                 ItemMeta customrush = rush.getItemMeta();
+                ItemMeta customduel = duel.getItemMeta();
 
-                // On custom l'item
+                // On custom les items
                 customrush.setDisplayName(ChatColor.WHITE + "✦ " + ChatColor.RED + "Rush");
                 customrush.setLore(Arrays.asList("§6-", "Cliques pour jouer en rush"));
                 customrush.addEnchant(org.bukkit.enchantments.Enchantment.DURABILITY, 1, true);
                 rush.setItemMeta(customrush);
+                customduel.setDisplayName(ChatColor.WHITE + "▶ " + ChatColor.BLUE + "Duel");
+                customduel.setLore(Arrays.asList("§6-", "Cliques pour jouer en duel"));
+                customduel.addEnchant(org.bukkit.enchantments.Enchantment.DURABILITY, 1, true);
+                duel.setItemMeta(customduel);
 
                 // On place les items dans le GUI
                 ItemStack redglass = new ItemStack(Material.STAINED_GLASS_PANE, 1);
@@ -99,9 +107,9 @@ public class SHRushListener implements Listener {
                 inv.setItem(0, redglass);
                 inv.setItem(1, redglass);
                 inv.setItem(2, redglass);
-                inv.setItem(3, redglass);
-                inv.setItem(4, rush);
-                inv.setItem(5, redglass);
+                inv.setItem(3, rush);
+                inv.setItem(4, redglass);
+                inv.setItem(5, duel);
                 inv.setItem(6, redglass);
                 inv.setItem(7, redglass);
                 inv.setItem(8, redglass);
@@ -171,6 +179,10 @@ public class SHRushListener implements Listener {
                 case STAINED_GLASS_PANE:
                     // On annule l'évènement pour que le joueur ne puisse pas prendre l'item
                     event.setCancelled(true);
+                    break;
+                case IRON_SWORD:
+                    // On téléporte le joueur au lobby du duel
+                    player.chat("/duel");
                     break;
             }
         }
@@ -264,4 +276,21 @@ public class SHRushListener implements Listener {
         }
     }
 
+    /**
+     * Méthode qui gère tout ce qui se passe lors du respawn d'un joueur
+     * @param e
+     */
+    @EventHandler
+    public void onPlayerRespawn(PlayerRespawnEvent e) throws InterruptedException {
+        // On récupère le joueur
+        Player player = e.getPlayer();
+
+        // On attends trois secondes
+        Thread.sleep(3000);
+
+        // On crée la zone d'apparition
+        Location spawn = new Location(Bukkit.getWorld("world"), -250, 96, -201);
+        // On téléporte le joueur
+        player.teleport(spawn);
+    }
 }

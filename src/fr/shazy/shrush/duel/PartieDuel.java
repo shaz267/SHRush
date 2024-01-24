@@ -59,6 +59,11 @@ public class PartieDuel {
         ItemStack rod = new ItemStack(Material.FISHING_ROD);
         // Des flèches
         ItemStack arrow = new ItemStack(Material.ARROW, 15);
+        // Une armure en fer
+        ItemStack helmet = new ItemStack(Material.IRON_HELMET);
+        ItemStack chestplate = new ItemStack(Material.IRON_CHESTPLATE);
+        ItemStack leggings = new ItemStack(Material.IRON_LEGGINGS);
+        ItemStack boots = new ItemStack(Material.IRON_BOOTS);
         // On donne tout ça aux joueurs
         playersList.get(0).getInventory().setItem(0, sword);
         playersList.get(1).getInventory().setItem(0, sword);
@@ -70,6 +75,14 @@ public class PartieDuel {
         playersList.get(1).getInventory().setItem(3, rod);
         playersList.get(0).getInventory().setItem(4, arrow);
         playersList.get(1).getInventory().setItem(4, arrow);
+        playersList.get(0).getInventory().setHelmet(helmet);
+        playersList.get(1).getInventory().setHelmet(helmet);
+        playersList.get(0).getInventory().setChestplate(chestplate);
+        playersList.get(1).getInventory().setChestplate(chestplate);
+        playersList.get(0).getInventory().setLeggings(leggings);
+        playersList.get(1).getInventory().setLeggings(leggings);
+        playersList.get(0).getInventory().setBoots(boots);
+        playersList.get(1).getInventory().setBoots(boots);
 
         // On vérifie que les joueurs soient en survival
         if (playersList.get(0).getGameMode() != org.bukkit.GameMode.SURVIVAL)
