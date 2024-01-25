@@ -31,11 +31,12 @@ public class CommandSpawn implements CommandExecutor {
                 // Si la partie était lancée
                 if(Main.partieDuel.getStarted()){
                     // On arrête la partie
-                    //Main.partieDuel.setStarted(false);
-                    // On téléporte le joueurs au spawn
-                    Location spawn = new Location(Bukkit.getWorld("world"), -250, 96, -201);
+                    Main.partieDuel.setStarted(false);
+                    // On téléporte l'autre joueur au spawn
                     for(Player p : Main.partieDuel.getPlayersList()){
-                        p.teleport(spawn);
+                        if(!p.equals(player)){
+                            p.chat("/spawn");
+                        }
                     }
                     // On clear les inventaires des joueurs
                     for(Player p : Main.partieDuel.getPlayersList()){

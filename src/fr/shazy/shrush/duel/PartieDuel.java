@@ -127,4 +127,8 @@ public class PartieDuel {
     public ArrayList<Player> getPlayersList() {
         return this.playersList;
     }
+
+    public void setStarted(boolean b) {
+        this.started = b;
+    }
 }
