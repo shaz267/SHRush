@@ -1,5 +1,6 @@
 package fr.shazy.shrush.commands;
 
+import fr.shazy.shrush.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -20,6 +21,30 @@ public class CommandSpawn implements CommandExecutor {
         if(commandSender instanceof Player){
             // On récupère le joueur
             Player player = (Player) commandSender;
+
+            // Si le joueur était présent dans une partie de duel
+            if(Main.partieDuel.getPlayersList().contains(player)){
+                // On le supprime de la partie
+                Main.partieDuel.getPlayersList().remove(player);
+                // On envoie un message aux joueurs
+                Bukkit.getServer().broadcastMessage(ChatColor.YELLOW + player.getName() + ChatColor.GRAY + " a quitté la partie de duel !");
+                // Si la partie était lancée
+                if(Main.partieDuel.getStarted()){
+                    // On arrête la partie
+                    //Main.partieDuel.setStarted(false);
+                    // On téléporte le joueurs au spawn
+                    Location spawn = new Location(Bukkit.getWorld("world"), -250, 96, -201);
+                    for(Player p : Main.partieDuel.getPlayersList()){
+                        p.teleport(spawn);
+                    }
+                    // On clear les inventaires des joueurs
+                    for(Player p : Main.partieDuel.getPlayersList()){
+                        p.getInventory().clear();
+                    }
+                    // On supprime la partie
+                    Main.partieDuel = null;
+                }
+            }
 
             // Si le joueur n'a pas déja la netherstar
             if(!player.getInventory().contains(Material.NETHER_STAR)){

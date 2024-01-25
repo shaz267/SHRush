@@ -2,6 +2,7 @@ package fr.shazy.shrush.rush;
 
 import fr.shazy.shrush.commands.CommandRushJoin;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -25,30 +26,51 @@ public class PartieRush{
     public void start() { //méthode pas très opti je pense
         TeamRush teamRouge = teams.get(0);
         TeamRush teamBleu = teams.get(1);
+        // On fait un décompte
+        for (int i = 5; i > 0; i--) {
+            // On envoie un message à tous les joueurs
+            for (Player player : playersList) {
+                player.sendMessage(ChatColor.YELLOW + "Début dans " + ChatColor.RED + i + ChatColor.YELLOW + " secondes !");
+            }
+            // On attend 1 seconde
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         for (Player player : teamRouge.getPlayersList()) {
-            player.teleport(new Location(Bukkit.getWorld("world_the_end"), 10000, 50, 10000));
+            player.teleport(new Location(Bukkit.getWorld("world_the_end"), 214, 69, -8));
             player.sendTitle("§c§lVa me les saigner !", "(c'est sur ta droite)");
         }
         for (Player player : teamBleu.getPlayersList()) {
-            player.teleport(new Location(Bukkit.getWorld("world_the_end"), 10000, 50, 10000));
+            player.teleport(new Location(Bukkit.getWorld("world_the_end"), 410, 69, -8));
             player.sendTitle("§r§lVa me les saigner !", "(c'est sur ta gauche)");
         }
         while (this.started) {
             for (Player player : playersList) {
                 if (player.isDead()){
                     player.spigot().respawn();
+                    player.setGameMode(org.bukkit.GameMode.SPECTATOR);
+                    player.teleport(new Location(Bukkit.getWorld("world_the_end"), 311, 90, -8));
                     if (CommandRushJoin.getPartie().getTeam(player).isBedDestroyed()){
-                        player.setGameMode(org.bukkit.GameMode.SPECTATOR);
                         player.sendTitle("§c§lT'es mort mec ! et tu va pas réaparaitre", "la honte..");
                     }
 
-                    if (teamRouge.getPlayersList().contains(player)) {
-                        player.teleport(new Location(Bukkit.getWorld("world_the_end"), 10000, 50, 10000));
+                    for (int y = 5; y>0; y--){
+                        player.sendTitle("§c§lT'es mort mec !", "respawn dans " + ChatColor.RED + y);
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
-                    if (teamBleu.getPlayersList().contains(player)) {
-                        player.teleport(new Location(Bukkit.getWorld("world_the_end"), 10000, 50, 10000));
+                    if (teamRouge.getPlayersList().contains(player)&&!teamRouge.isBedDestroyed()) {
+                        player.teleport(new Location(Bukkit.getWorld("world_the_end"), 214, 69, -8));
                     }
-                    player.sendTitle("§c§lC'est pas fini lache rien !", "");
+                    if (teamBleu.getPlayersList().contains(player)&&!teamBleu.isBedDestroyed()) {
+                        player.teleport(new Location(Bukkit.getWorld("world_the_end"), 410, 69, -8));
+                    }
                 }
             }
         }
@@ -80,9 +102,6 @@ public class PartieRush{
         this.players++;
         this.playersList.add(player);
     }
-    public void retirerPlayer() {
-        this.players--;
-    }
     public TeamRush getTeam(String nomTeam){
         for (TeamRush team : teams) {
             if (team.getName().equals(nomTeam)) {
@@ -98,5 +117,12 @@ public class PartieRush{
             }
         }
         return null;
+    }
+    public ArrayList<Player> getPlayersList() {
+        return playersList;
+    }
+    public void removePlayer(Player player) {
+        this.playersList.remove(player);
+        this.players--;
     }
 }

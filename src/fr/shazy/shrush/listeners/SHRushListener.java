@@ -13,6 +13,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -200,8 +201,6 @@ public class SHRushListener implements Listener {
                     //on lui envoie un message
                     player.sendMessage(ChatColor.RED + "Tu as rejoint l'équipe rouge");
                 }
-                else
-                    player.sendMessage(ChatColor.RED + "Tu es déjà dans l'équipe rouge");
             }
             //si l'item cliqué est un block de laine bleu
             if (current.getType() == Material.WOOL && current.getItemMeta().getDisplayName().equals("§9Equipe Bleu")){
@@ -213,8 +212,6 @@ public class SHRushListener implements Listener {
                     //on lui envoie un message
                     player.sendMessage(ChatColor.BLUE + "Tu as rejoint l'équipe bleu");
                 }
-                else
-                    player.sendMessage(ChatColor.BLUE + "Tu es déjà dans l'équipe bleu");
             }
             //si les deux équipes sont pleines on démarre la partie
             if (teamRouge.getPlayersList().size()==teamRouge.getMaxPlayers()&&teamBleu.getPlayersList().size()==teamBleu.getMaxPlayers()) {
@@ -225,6 +222,7 @@ public class SHRushListener implements Listener {
                 CommandRushJoin.getPartie().start();
             }
         }
+        event.setCancelled(true);
     }
     @EventHandler
     public void onBreak(BlockBreakEvent event){
@@ -236,20 +234,33 @@ public class SHRushListener implements Listener {
             event.setCancelled(true);
         }
         //on récupère le block cassé
-        Material block = event.getBlock().getType();
+        Material bed = event.getBlock().getType();
         //si le block cassé est un lit
-        if (block == Material.BED_BLOCK){
-            //on récupère l'équipe du joueur
-            TeamRush team = CommandRushJoin.getPartie().getTeam(player);
+        if (bed == Material.BED_BLOCK){
+            TeamRush teamSansBed = null;
+            //on parcours les équipes pour trouver celle qui a le lit cassé
+            for(TeamRush team : CommandRushJoin.getPartie().getTeams()){
+                if (team.getBed().equals(bed))
+                    teamSansBed = team;
+            }
             //affiche un message a tout les joueurs
-            Bukkit.getServer().broadcastMessage(ChatColor.RED + player.getName() + " a détruit le lit de ses adversaires !");
+            Bukkit.getServer().broadcastMessage(ChatColor.RED + player.getName() + " a fait un attentat chez les " + teamSansBed.getName());
             //on détruit le lit
-            event.getBlock().setType(Material.AIR);
+            //event.getBlock().setType(Material.AIR);
             //on met le lit comme détruit
-            team.setBedDestroyed(true);
+            if (teamSansBed != null)
+                teamSansBed.setBedDestroyed(true);
         }
     }
-
+    @EventHandler
+    public void onDrop(PlayerDropItemEvent event){
+        if (event.getItemDrop().getItemStack().getType() == Material.WOOL&&event.getItemDrop().getItemStack().getItemMeta().getDisplayName().equals("§lChoix de l'équipe"))
+            event.setCancelled(true);
+        if (event.getItemDrop().getItemStack().getType() == Material.WOOD_DOOR&&event.getItemDrop().getItemStack().getItemMeta().getDisplayName().equals(ChatColor.RED + "§lQuitter"))
+            event.setCancelled(true);
+        if (event.getItemDrop().getItemStack().getType() == Material.NETHER_STAR&&event.getItemDrop().getItemStack().getItemMeta().getDisplayName().equals("§c-§f-§c-§f-§c-§f-§c» §4§lMe§c§lnu §c«§f-§c-§f-§c-§f-§c-"))
+            event.setCancelled(true);
+    }
     /**
      * Méthode qui gère tout ce qui se passe lors de la mort d'un joueur
      */

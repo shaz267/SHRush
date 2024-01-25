@@ -9,6 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -18,9 +19,9 @@ public class CommandRushJoin implements CommandExecutor {
     private static final PartieRush partie = new PartieRush();
 
     public CommandRushJoin() {
-        TeamRush teamRouge = new TeamRush("Rouge", Color.RED);
+        TeamRush teamRouge = new TeamRush("Rouge");
         partie.ajouterTeam(teamRouge);
-        TeamRush teamBleu = new TeamRush("Bleu", Color.BLUE);
+        TeamRush teamBleu = new TeamRush("Bleu");
         partie.ajouterTeam(teamBleu);
     }
 
@@ -62,7 +63,7 @@ public class CommandRushJoin implements CommandExecutor {
         player.getInventory().setItem(8, door);
         player.closeInventory();
         // On téléporte le joueur au lobby du rush
-        player.teleport(new Location(Bukkit.getWorld("world_the_end"), 10000, 50, 10000));
+        player.teleport(new Location(Bukkit.getWorld("world_the_end"), 311, 69, -8));
         // On affiche un message
         Bukkit.getServer().broadcastMessage(ChatColor.YELLOW + player.getName() + ChatColor.GRAY + " a rejoint la partie !");
         return false;
