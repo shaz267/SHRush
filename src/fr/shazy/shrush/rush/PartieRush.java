@@ -2,12 +2,10 @@ package fr.shazy.shrush.rush;
 
 import fr.shazy.shrush.commands.CommandRushJoin;
 import fr.shazy.shrush.listeners.SHRushListener;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 
@@ -41,11 +39,29 @@ public class PartieRush{
                 e.printStackTrace();
             }
         }
+        for (Player player : playersList) {
+            player.getInventory().clear();
+            ItemStack sword = new ItemStack(Material.STONE_SWORD);
+            ItemStack pickaxe = new ItemStack(Material.IRON_PICKAXE);
+            ItemStack helmet = new ItemStack(Material.LEATHER_HELMET);
+            ItemStack chestplate = new ItemStack(Material.LEATHER_CHESTPLATE);
+            ItemStack leggings = new ItemStack(Material.LEATHER_LEGGINGS);
+            ItemStack boots = new ItemStack(Material.LEATHER_BOOTS);
+            ItemStack block = new ItemStack(Material.SANDSTONE, 10);
+            player.getInventory().addItem(sword);
+            player.getInventory().addItem(pickaxe);
+            player.getInventory().addItem(block);
+            player.getInventory().setHelmet(helmet);
+            player.getInventory().setChestplate(chestplate);
+            player.getInventory().setLeggings(leggings);
+            player.getInventory().setBoots(boots);
+        }
         for (Player player : teamRouge.getPlayersList()) {
             player.teleport(new Location(Bukkit.getWorld("world_the_end"), 214, 69, -8));
             player.sendTitle("§c§lVa me les saigner !", "(c'est sur ta droite)");
         }
         for (Player player : teamBleu.getPlayersList()) {
+            player.getInventory().clear();
             player.teleport(new Location(Bukkit.getWorld("world_the_end"), 410, 69, -8));
             player.sendTitle("§r§lVa me les saigner !", "(c'est sur ta gauche)");
         }

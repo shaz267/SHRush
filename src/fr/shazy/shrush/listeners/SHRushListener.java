@@ -169,7 +169,6 @@ public class SHRushListener implements Listener {
         Player player = (Player) event.getWhoClicked();
         ItemStack current = event.getCurrentItem();
 
-        System.out.println(inGame);
         if (player.getGameMode().equals(GameMode.SURVIVAL)&&!inGame)
             event.setCancelled(true);
 
@@ -221,7 +220,8 @@ public class SHRushListener implements Listener {
                 }
             }
             //si les deux équipes sont pleines on démarre la partie
-            if (teamRouge.getPlayersList().size()==teamRouge.getMaxPlayers()&&teamBleu.getPlayersList().size()==teamBleu.getMaxPlayers()) {
+            //if (teamRouge.getPlayersList().size()==teamRouge.getMaxPlayers()&&teamBleu.getPlayersList().size()==teamBleu.getMaxPlayers()) {
+            if (teamRouge.getPlayersList().size()==1){
                 // On préviens que le paetie va commencer
                 Bukkit.getServer().broadcastMessage(ChatColor.GREEN + "Que la partie commence !");
                 // On démarre la partie
