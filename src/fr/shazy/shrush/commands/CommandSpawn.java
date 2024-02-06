@@ -23,7 +23,6 @@ public class CommandSpawn implements CommandExecutor {
         if(commandSender instanceof Player){
             // On récupère le joueur
             Player player = (Player) commandSender;
-            player.chat("test sapwn");
 
             // Si le joueur était présent dans une partie de duel
             if(Main.partieDuel.getPlayersList().contains(player)){
