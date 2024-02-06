@@ -1,6 +1,7 @@
 package fr.shazy.shrush.commands;
 
 import fr.shazy.shrush.Main;
+import fr.shazy.shrush.rush.PartieRush;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -8,6 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -21,6 +23,7 @@ public class CommandSpawn implements CommandExecutor {
         if(commandSender instanceof Player){
             // On récupère le joueur
             Player player = (Player) commandSender;
+            player.chat("test sapwn");
 
             // Si le joueur était présent dans une partie de duel
             if(Main.partieDuel.getPlayersList().contains(player)){
@@ -46,6 +49,31 @@ public class CommandSpawn implements CommandExecutor {
                     Main.partieDuel = null;
                 }
             }
+            PartieRush partieRush = CommandRushJoin.getPartie();
+            //si le joueur était présent dans une partie de rush
+            if(partieRush.getPlayersList().contains(player)){
+                // On le supprime de la partie
+                partieRush.getPlayersList().remove(player);
+                // On envoie un message aux joueurs
+                Bukkit.getServer().broadcastMessage(ChatColor.YELLOW + player.getName() + ChatColor.GRAY + " a quitté la partie de rush !");
+                // Si la partie était lancée
+                if(partieRush.isStarted()){
+                    // On arrête la partie
+                    partieRush.setStarted(false);
+                    // On téléporte l'autre joueur au spawn
+                    for(Player p : partieRush.getPlayersList()){
+                        if(!p.equals(player)){
+                            p.chat("/spawn");
+                        }
+                    }
+                    // On clear les inventaires des joueurs
+                    for(Player p : partieRush.getPlayersList()){
+                        p.getInventory().clear();
+                    }
+                    // On supprime la partie
+                    partieRush.setStarted(false);
+                }
+            }
 
             // Si le joueur n'a pas déja la netherstar
             if(!player.getInventory().contains(Material.NETHER_STAR)){
@@ -54,7 +82,7 @@ public class CommandSpawn implements CommandExecutor {
 
                 // On custom la netherstar
                 ItemMeta customns = netherstar.getItemMeta();
-                customns.addEnchant(org.bukkit.enchantments.Enchantment.DURABILITY, 1, true);
+                customns.addEnchant(Enchantment.DURABILITY, 1, true);
                 customns.setDisplayName("§c-§f-§c-§f-§c-§f-§c» §4§lMe§c§lnu §c«§f-§c-§f-§c-§f-§c-");
                 customns.setLore(Arrays.asList("§6-", "§6Clique droit pour ouvrir le menu"));
                 netherstar.setItemMeta(customns);
