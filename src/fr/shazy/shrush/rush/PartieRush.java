@@ -1,6 +1,7 @@
 package fr.shazy.shrush.rush;
 
 import fr.shazy.shrush.commands.CommandRushJoin;
+import fr.shazy.shrush.listeners.SHRushListener;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -24,6 +25,7 @@ public class PartieRush{
         this.playersList = new ArrayList<Player>();
     }
     public void start() { //méthode pas très opti je pense
+        SHRushListener.setInGame(true);
         TeamRush teamRouge = teams.get(0);
         TeamRush teamBleu = teams.get(1);
         // On fait un décompte
@@ -75,6 +77,7 @@ public class PartieRush{
             }
         }
         for (Player player : playersList) {
+            SHRushListener.setInGame(false);
             player.setGameMode(GameMode.SURVIVAL);
             player.sendTitle("§c§lLa partie est finie !", "");
             player.chat("/spawn");

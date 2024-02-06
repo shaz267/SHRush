@@ -1,5 +1,6 @@
 package fr.shazy.shrush.duel;
 
+import fr.shazy.shrush.listeners.SHRushListener;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -24,6 +25,7 @@ public class PartieDuel {
      * Méthode qui démarre la partie
      */
     public void start() {
+        SHRushListener.setInGame(true);
         // On fait un décompte
         for (int i = 5; i > 0; i--) {
             // On envoie un message à tous les joueurs
@@ -98,6 +100,7 @@ public class PartieDuel {
      */
     public void stop(){
         this.started = false;
+        SHRushListener.setInGame(false);
     }
 
     /**

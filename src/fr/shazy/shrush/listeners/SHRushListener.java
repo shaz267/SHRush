@@ -3,10 +3,7 @@ package fr.shazy.shrush.listeners;
 import fr.shazy.shrush.Main;
 import fr.shazy.shrush.commands.CommandRushJoin;
 import fr.shazy.shrush.rush.TeamRush;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -25,6 +22,12 @@ import java.util.Arrays;
 import java.util.Collections;
 
 public class SHRushListener implements Listener {
+
+    private static boolean inGame = false;
+    public static void setInGame(boolean inGame) {
+        SHRushListener.inGame = inGame;
+    }
+
     /**
      * Méthode qui gère tout ce qui se passe lors de la connexion d'un joueur
      * @param event
@@ -166,6 +169,10 @@ public class SHRushListener implements Listener {
         Player player = (Player) event.getWhoClicked();
         ItemStack current = event.getCurrentItem();
 
+        System.out.println(inGame);
+        if (player.getGameMode().equals(GameMode.SURVIVAL)&&!inGame)
+            event.setCancelled(true);
+
         // Si l'item cliqué est null
         if(current == null){return;}
 
@@ -222,7 +229,6 @@ public class SHRushListener implements Listener {
                 CommandRushJoin.getPartie().start();
             }
         }
-        event.setCancelled(true);
     }
     @EventHandler
     public void onBreak(BlockBreakEvent event){
