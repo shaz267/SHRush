@@ -30,7 +30,7 @@ public class CommandDuel implements CommandExecutor {
         // Sinon
         else{
             // On crée une zone d'apparition
-            Location duel = new Location(Bukkit.getWorld("world"), -295, 97, -207);
+            Location duel = new Location(Bukkit.getWorld("world"),-499,119,-253);
             // On téléporte le joueur
             player.teleport(duel);
             // On le clear

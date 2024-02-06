@@ -42,8 +42,8 @@ public class PartieDuel {
             player.sendMessage(ChatColor.GREEN + "Battez-vous !");
         }
         // On téléporte les 2 joueurs dans l'arène
-        Location arene1 = new Location(Bukkit.getWorld("world"), -295, 97, -200);
-        Location arene2 = new Location(Bukkit.getWorld("world"), -290, 97, -204);
+        Location arene1 = new Location(Bukkit.getWorld("world"), -497, 119, -300);
+        Location arene2 = new Location(Bukkit.getWorld("world"), -439, 119, -300);
         playersList.get(0).teleport(arene1);
         playersList.get(1).teleport(arene2);
         // On clear les inventaires des joueurs
@@ -98,9 +98,6 @@ public class PartieDuel {
      */
     public void stop(){
         this.started = false;
-        for (Player player : playersList) {
-
-        }
     }
 
     /**
