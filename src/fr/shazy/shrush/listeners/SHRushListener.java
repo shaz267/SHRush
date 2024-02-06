@@ -281,6 +281,9 @@ public class SHRushListener implements Listener {
                 otherPlayer = Main.partieDuel.getPlayersList().get(0);
             // On affiche un message
             Bukkit.getServer().broadcastMessage(ChatColor.YELLOW + player.getName() + ChatColor.GRAY + " a perdu en duel face à " + ChatColor.YELLOW + otherPlayer.getName() + ChatColor.GRAY + " !");
+            // On clear les deux joueurs
+            player.getInventory().clear();
+            otherPlayer.getInventory().clear();
             // On téléporte les joueur au spawn
             player.chat("/spawn");
             otherPlayer.chat("/spawn");
@@ -296,12 +299,7 @@ public class SHRushListener implements Listener {
         // On récupère le joueur
         Player player = e.getPlayer();
 
-        // On attends trois secondes
-        Thread.sleep(3000);
-
-        // On crée la zone d'apparition
-        Location spawn = new Location(Bukkit.getWorld("world"), -250, 96, -201);
-        // On téléporte le joueur
-        player.teleport(spawn);
+        // On téléporte le joueur au spawn
+        player.chat("/spawn");
     }
 }

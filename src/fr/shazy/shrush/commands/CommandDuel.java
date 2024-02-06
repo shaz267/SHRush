@@ -21,6 +21,13 @@ public class CommandDuel implements CommandExecutor {
         // On récupère le joueur
         Player player = (Player) commandSender;
 
+        // Si le joueur est déja dans une partie en cours
+        if(Main.partieDuel.getPlayersList().contains(player)){
+            // On envoie un message d'erreur
+            player.sendMessage(ChatColor.RED + "Vous êtes déja dans une partie de duel !");
+            return false;
+        }
+
         // Si une partie duel est déja en cours
         if(Main.partieDuel.getStarted()){
             // On envoie un message d'erreur
